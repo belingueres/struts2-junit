@@ -102,7 +102,7 @@ When some of those parameters change, you can use the {{{@Config}}} annotation a
   * {{{namespace}}}: The namespace on the configuration file to call the right action.
   * {{{methodName}}}: The name of the method inside the action class that needs to be executed.
 
-To avoid repeating yourself different {{{@Config}}} annotations, you can place more a general one for the TestCase class at class definition level, and apply special parameters using {{{@Config}}} annotations at method level. Por example:
+To avoid repeating yourself different {{{@Config}}} annotations, you can place a more general one for the TestCase class at class definition level, and apply special parameters using {{{@Config}}} annotations at method level. Por example:
 
 {{{
 @Config(file="test-struts.xml")
