@@ -129,7 +129,7 @@ public class StrutsBaseTestCaseTest {
 		}
 	}
 	
-	private static class MockStrutsTestConfiguration extends StrutsBaseTestCase.DefaultConfiguration {
+	private static class MockStrutsTestConfiguration extends StrutsBaseTestCase.AbstractStrutsTestConfiguration {
 		public MockStrutsTestConfiguration(StrutsBaseTestCase testObject) {
 			super(testObject);
 		}

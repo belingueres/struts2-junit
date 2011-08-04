@@ -124,9 +124,37 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 			this.testObject = testObject;
 		}
 		
-		public abstract void setUpFixture();
 		public abstract void loadConfiguration(String configFile);
 		public abstract ActionProxy createActionProxy(String namespace, String actionName, String methodName);
+
+		public void setUpFixture() {
+			// prepare parameters
+			//
+			if (configFile.isEmpty()) {
+				// defaults to some default xml file
+				configFile = "struts.xml";
+			}
+			
+			if (actionName.isEmpty()) {
+				// defaults to the method name
+				actionName = testObject.testName.getMethodName();
+			}
+
+			if (namespace.isEmpty()) {
+				// defaults to no namespace
+				namespace = null;
+			}
+			
+			if (methodName.isEmpty()) {
+				// defaults to no method specified
+				methodName = null;
+			}
+
+			// do Struts the initialization stuff
+			//
+			loadConfiguration(configFile);
+			createActionProxy(namespace, actionName, methodName);
+		}
 
 		public void updateIfNotEmpty(Config annotation) {
 			configFile = updateIfNotEmpty(configFile, annotation.file());
@@ -155,36 +183,6 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 		@Override
 		public ActionProxy createActionProxy(String namespace, String actionName, String methodName) {
 			return testObject.createActionProxy(namespace, actionName, methodName);
-		}
-
-		@Override
-		public void setUpFixture() {
-			// prepare parameters
-			//
-			if (configFile.isEmpty()) {
-				// defaults to some default xml file
-				configFile = "struts.xml";
-			}
-			
-			if (actionName.isEmpty()) {
-				// defaults to the method name
-				actionName = testObject.testName.getMethodName();
-			}
-
-			if (namespace.isEmpty()) {
-				// defaults to no namespace
-				namespace = null;
-			}
-			
-			if (methodName.isEmpty()) {
-				// defaults to no method specified
-				methodName = null;
-			}
-
-			// do Struts the initialization stuff
-			//
-			loadConfiguration(configFile);
-			createActionProxy(namespace, actionName, methodName);
 		}
 
 	}
