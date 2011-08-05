@@ -21,7 +21,8 @@ Let's see an example test using the following configuration struts.xml file whic
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd" >
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+  "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
   <package name="testpkg" extends="struts-default">
     <interceptors>
