@@ -17,7 +17,7 @@ Actually the library is only 2 classes:
 
 = An example =
 
-Let's see an example test using the following configuration struts.xml file which intents to test that the `BijectionInterceptor` (using à la JBoss Seam's `@In` and `@Out` annotations) is working properly injecting and outjection values in the conversation scope:
+Let's see an example test using the following configuration `struts.xml` file which intents to test that the `BijectionInterceptor` (using à la JBoss Seam's `@In` and `@Out` annotations) is working properly injecting and outjecting values in the conversation scope:
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
@@ -104,7 +104,7 @@ When some of those parameters change, you can use the `@Config` annotation at cl
   * `namespace`: The namespace on the configuration file to call the right action.
   * `methodName`: The name of the method inside the action class that needs to be executed.
 
-To avoid repeating yourself different `@Config` annotations, you can place a more general one for the entire test file at class definition level, and apply special parameters using `@Config` annotations at method level. Por example:
+To avoid repeating yourself using nearly identical `@Config` annotations at method level, you can place a more general one for the entire test file at class definition level, and apply special parameters using `@Config` annotations at method level. Por example:
 
 {{{
 @Config(file="test-struts.xml")
