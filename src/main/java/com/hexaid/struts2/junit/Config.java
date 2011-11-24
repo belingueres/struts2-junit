@@ -36,11 +36,9 @@ public @interface Config {
 	 * the configuration XML file. If not specified, the 
 	 * <b>method name</b under test is the action to execute.<br/>
 	 * For example, if the test method is:
-	 * <pre>
 	 * &#064;Config
 	 * &#064;Test
 	 * public void testSomeBusinessLogic() {...}
-	 * </pre>
 	 * 
 	 * <br/>
 	 * then the action name to execute is 'testSomeBusinessLogic'. 
@@ -49,10 +47,10 @@ public @interface Config {
 
 	/**
 	 * The method name to execute inside the requested action.<br/>
-	 * This corresponds to the <pre>method</pre> attribute
-	 * of the <pre>action</pre> tag of the configuration xml file.
+	 * This corresponds to the method attribute
+	 * of the action tag of the configuration xml file.
 	 * If not specified then the default method inside the action
-	 * object is executed, that is, <pre>execute()</pre>.
+	 * object is executed, that is, execute().
 	 */
 	String methodName() default "";
 }
