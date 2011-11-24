@@ -1,0 +1,9 @@
+#summary Release notes and What's New for all the versions of the library.
+
+= struts2-junit 0.2 =
+
+  * Modified {{{@Config}}} annotation to support multiple Struts 2 XML configuration files.
+
+= struts2-junit 0.1 =
+
+  * First public release.
