@@ -34,7 +34,7 @@ public class StrutsBaseTestCaseTest {
 			AbstractStrutsTestConfiguration config = new MockStrutsTestConfiguration(test);
 			test.setUpResolvingAnnotations(config);
 			
-			assertArrayEquals(new String[] {"struts.xml"}, config.configFile);
+			assertEquals("struts.xml", config.configFile);
 			assertEquals(null, config.namespace);
 			assertEquals("theMethodNameIsTheActionNameTest", config.actionName);
 			assertEquals(null, config.methodName);
@@ -55,7 +55,7 @@ public class StrutsBaseTestCaseTest {
 			AbstractStrutsTestConfiguration config = new MockStrutsTestConfiguration(test);
 			test.setUpResolvingAnnotations(config);
 			
-			assertArrayEquals(new String[] {"struts.xml"}, config.configFile);
+			assertEquals("struts.xml", config.configFile);
 			assertEquals("/", config.namespace);
 			assertEquals("differentActionName", config.actionName);
 			assertEquals(null, config.methodName);
@@ -76,7 +76,7 @@ public class StrutsBaseTestCaseTest {
 			AbstractStrutsTestConfiguration config = new MockStrutsTestConfiguration(test);
 			test.setUpResolvingAnnotations(config);
 			
-			assertArrayEquals(new String[] {"another-struts.xml"}, config.configFile);
+			assertEquals("another-struts.xml", config.configFile);
 			assertEquals("/somename", config.namespace);
 			assertEquals("theMethodNameIsTheActionNameTest", config.actionName);
 			assertEquals(null, config.methodName);
@@ -97,28 +97,7 @@ public class StrutsBaseTestCaseTest {
 			AbstractStrutsTestConfiguration config = new MockStrutsTestConfiguration(test);
 			test.setUpResolvingAnnotations(config);
 			
-			assertArrayEquals(new String[] {"another-struts.xml"}, config.configFile);
-			assertEquals("/", config.namespace);
-			assertEquals("differentActionName", config.actionName);
-			assertEquals("show", config.methodName);
-		} catch (Exception e) {
-			fail(e.getMessage());
-		}
-	}
-
-	@Test
-	public void testsetUpResolvingAnnotationsWithTwoFiles() {
-		try {
-			Test3 test = new Test3();
-			
-			Method testMethod = 
-				test.getClass().getMethod("aMethodWithAnnotationTest");
-			test.testName.starting(new FrameworkMethod(testMethod));
-			
-			AbstractStrutsTestConfiguration config = new MockStrutsTestConfiguration(test);
-			test.setUpResolvingAnnotations(config);
-			
-			assertArrayEquals(new String[]{"struts-plugin.xml", "another-struts.xml"}, config.configFile);
+			assertEquals("another-struts.xml", config.configFile);
 			assertEquals("/", config.namespace);
 			assertEquals("differentActionName", config.actionName);
 			assertEquals("show", config.methodName);
@@ -149,18 +128,6 @@ public class StrutsBaseTestCaseTest {
 		public void aMethodWithAnnotationTest() {
 		}
 	}
-
-	@Config(file={"struts-plugin.xml", "another-struts.xml"}, namespace="/somename")
-	public static class Test3 extends StrutsBaseTestCase {
-		@Test
-		public void theMethodNameIsTheActionNameTest() {
-		}
-		
-		@Test
-		@Config(actionName="differentActionName", namespace="/", methodName="show")
-		public void aMethodWithAnnotationTest() {
-		}
-	}
 	
 	private static class MockStrutsTestConfiguration extends StrutsBaseTestCase.AbstractStrutsTestConfiguration {
 		public MockStrutsTestConfiguration(StrutsBaseTestCase testObject) {
@@ -168,7 +135,7 @@ public class StrutsBaseTestCaseTest {
 		}
 
 		@Override
-		public void loadConfiguration(String[] configFile) {
+		public void loadConfiguration(String configFile) {
 			// do nothing
 		}
 
@@ -178,6 +145,7 @@ public class StrutsBaseTestCaseTest {
 			// do nothing
 			return null;
 		}
+		
 	}
 
 }

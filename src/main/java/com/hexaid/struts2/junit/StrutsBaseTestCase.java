@@ -1,7 +1,5 @@
 package com.hexaid.struts2.junit;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
@@ -21,8 +19,7 @@ import com.opensymphony.xwork2.config.providers.XmlConfigurationProvider;
 
 /**
  * @author Gabriel Belingueres
- * @version 0.2
- * @since 0.1
+ *
  */
 public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 	
@@ -47,7 +44,7 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 		ServletActionContext.setResponse(response);
 		ServletActionContext.setServletContext(servletContext);
 		
-		final DefaultConfiguration config = new DefaultConfiguration(this); 
+		DefaultConfiguration config = new DefaultConfiguration(this); 
 
 		setUpResolvingAnnotations(config);
 	}
@@ -83,30 +80,21 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 	}
 
 	/**
-	 * Loads the XML configuration providers given by the strutsFilenames array.
-	 * @param strutsFilenames the XML configuration files names used for this test.
+	 * Loads the struts.xml configuration biven by the strutsFilename.
+	 * @param strutsFilename the struts.xml file name used for this test.
 	 */
-	protected void loadConfiguration(final String[] strutsFilenames) {
-		final List<XmlConfigurationProvider> providers = new ArrayList<XmlConfigurationProvider>();
-		
-		final XmlConfigurationProvider providerStd = 
+	protected void loadConfiguration(final String strutsFilename) {
+		XmlConfigurationProvider providerStd = 
 				new XmlConfigurationProvider("struts-default.xml");
-		
-		providers.add(providerStd);
 
-		for(final String filename : strutsFilenames) {
-			final XmlConfigurationProvider provider = new XmlConfigurationProvider(filename);
-			provider.init(configuration);
-			
-			providers.add(provider);
-		}
+		XmlConfigurationProvider provider = 
+				new XmlConfigurationProvider(strutsFilename);
 
-		final XmlConfigurationProvider[] providersArray = 
-				providers.toArray(new XmlConfigurationProvider[providers.size()]);
-		loadConfigurationProviders(providersArray);
+		provider.init(configuration);
+		loadConfigurationProviders(providerStd, provider);
 	}
 
-	protected void setUpResolvingAnnotations(final AbstractStrutsTestConfiguration config) throws NoSuchMethodException {
+	protected void setUpResolvingAnnotations(AbstractStrutsTestConfiguration config) throws NoSuchMethodException {
 		// type level annotation
 		Config annotation = this.getClass().getAnnotation(Config.class);
 		if (annotation != null) {
@@ -127,26 +115,26 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 	static abstract class AbstractStrutsTestConfiguration {
 		protected StrutsBaseTestCase testObject;
 		
-		protected String[] configFile = {};
+		protected String configFile = "";
 		protected String namespace = "";
 		protected String actionName = "";
 		protected String methodName = "";
 		
-		public AbstractStrutsTestConfiguration(final StrutsBaseTestCase testObject) {
+		public AbstractStrutsTestConfiguration(StrutsBaseTestCase testObject) {
 			this.testObject = testObject;
 		}
 		
-		public abstract void loadConfiguration(String[] configFile);
+		public abstract void loadConfiguration(String configFile);
 		public abstract ActionProxy createActionProxy(String namespace, String actionName, String methodName);
 
 		public void setUpFixture() {
 			// prepare parameters
 			//
-			if (configFile.length == 0) {
-				// none specified
-				configFile = new String[] { "struts.xml" };
+			if (configFile.isEmpty()) {
+				// defaults to some default xml file
+				configFile = "struts.xml";
 			}
-				
+			
 			if (actionName.isEmpty()) {
 				// defaults to the method name
 				actionName = testObject.testName.getMethodName();
@@ -168,18 +156,14 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 			createActionProxy(namespace, actionName, methodName);
 		}
 
-		public void updateIfNotEmpty(final Config annotation) {
-			configFile = updateArrayIfNotEmpty(configFile, annotation.file());
+		public void updateIfNotEmpty(Config annotation) {
+			configFile = updateIfNotEmpty(configFile, annotation.file());
 			namespace = updateIfNotEmpty(namespace, annotation.namespace());
 			actionName = updateIfNotEmpty(actionName, annotation.actionName());
 			methodName = updateIfNotEmpty(methodName, annotation.methodName());
 		}
 
-		private String[] updateArrayIfNotEmpty(final String[] current, final String[] newValue) {
-			return newValue.length == 0 ? current : newValue;
-		}
-
-		protected String updateIfNotEmpty(final String current, final String newValue) {
+		protected String updateIfNotEmpty(String current, String newValue) {
 			return newValue.isEmpty() ? current : newValue;
 		}
 	}
@@ -187,17 +171,17 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 	
 	static class DefaultConfiguration extends AbstractStrutsTestConfiguration {
 		
-		public DefaultConfiguration(final StrutsBaseTestCase testObject) {
+		public DefaultConfiguration(StrutsBaseTestCase testObject) {
 			super(testObject);
 		}
 
 		@Override
-		public void loadConfiguration(final String[] configFile) {
+		public void loadConfiguration(String configFile) {
 			testObject.loadConfiguration(configFile);
 		}
 
 		@Override
-		public ActionProxy createActionProxy(final String namespace, final String actionName, final String methodName) {
+		public ActionProxy createActionProxy(String namespace, String actionName, String methodName) {
 			return testObject.createActionProxy(namespace, actionName, methodName);
 		}
 
