@@ -4,6 +4,18 @@
 
   * Modified {{{@Config}}} annotation to support multiple Struts 2 XML configuration files.
 
+Example use case: Say you are developing an [http://struts.apache.org/2.2.3.1/docs/plugins.html Struts2 plugin], which commonly includes a {{{struts-plugin.xml}}} which is used to configure or initialize the plugin.
+
+If your test depends on this plugin, then you can configure the test my annotating with:
+
+{{{@Config(file={"struts-plugin.xml", "struts-test.xml"})}}}
+
+This will load the following configurations, in this specific order:
+
+  # struts-default.xml (allways loaded first by default)
+  # struts-plugin.xml
+  # struts-test.xml
+
 = struts2-junit 0.1 =
 
   * First public release.
