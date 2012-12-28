@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.StrutsJUnit4TestCase;
+import org.apache.struts2.config.StrutsXmlConfigurationProvider;
 import org.apache.struts2.dispatcher.Dispatcher;
 import org.junit.After;
 import org.junit.Before;
@@ -21,7 +22,7 @@ import com.opensymphony.xwork2.config.providers.XmlConfigurationProvider;
 
 /**
  * @author Gabriel Belingueres
- * @version 0.2
+ * @version 0.2.2
  * @since 0.1
  */
 public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
@@ -87,15 +88,15 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 	 * @param strutsFilenames the XML configuration files names used for this test.
 	 */
 	protected void loadConfiguration(final String[] strutsFilenames) {
-		final List<XmlConfigurationProvider> providers = new ArrayList<XmlConfigurationProvider>();
+		final List<StrutsXmlConfigurationProvider> providers = new ArrayList<StrutsXmlConfigurationProvider>();
 		
-		final XmlConfigurationProvider providerStd = 
-				new XmlConfigurationProvider("struts-default.xml");
+		final StrutsXmlConfigurationProvider providerStd = 
+				new StrutsXmlConfigurationProvider("struts-default.xml", true, servletContext);
 		
 		providers.add(providerStd);
 
 		for(final String filename : strutsFilenames) {
-			final XmlConfigurationProvider provider = new XmlConfigurationProvider(filename);
+			final StrutsXmlConfigurationProvider provider = new StrutsXmlConfigurationProvider(filename, true, servletContext);
 			provider.init(configuration);
 			
 			providers.add(provider);
