@@ -18,7 +18,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletContext;
 
 import com.opensymphony.xwork2.ActionProxy;
-import com.opensymphony.xwork2.config.providers.XmlConfigurationProvider;
 
 /**
  * @author Gabriel Belingueres
@@ -102,8 +101,8 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 			providers.add(provider);
 		}
 
-		final XmlConfigurationProvider[] providersArray = 
-				providers.toArray(new XmlConfigurationProvider[providers.size()]);
+		final StrutsXmlConfigurationProvider[] providersArray = 
+				providers.toArray(new StrutsXmlConfigurationProvider[providers.size()]);
 		loadConfigurationProviders(providersArray);
 	}
 
