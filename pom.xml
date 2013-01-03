@@ -11,7 +11,7 @@
   <groupId>com.hexaid.struts2.junit</groupId>
   <artifactId>struts2-junit</artifactId>
   <packaging>jar</packaging>
-  <version>0.2.2-SNAPSHOT</version>
+  <version>0.2.2</version>
 
   <name>struts2-junit</name>
   <url>http://code.google.com/p/struts2-junit/</url>
@@ -37,9 +37,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:svn:https://struts2-junit.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://struts2-junit.googlecode.com/svn/trunk</developerConnection>
-    <url>http://code.google.com/p/struts2-junit/source/browse/#svn%2Ftrunk</url>
+    <connection>scm:svn:https://struts2-junit.googlecode.com/svn/tags/struts2-junit-0.2.2</connection>
+    <developerConnection>scm:svn:https://struts2-junit.googlecode.com/svn/tags/struts2-junit-0.2.2</developerConnection>
+    <url>http://code.google.com/p/struts2-junit/source/browse/#svn%2Ftrunk/tags/struts2-junit-0.2.2</url>
   </scm>
 
   <properties>
