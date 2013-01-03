@@ -1,5 +1,13 @@
 #summary Release notes and What's New for all the versions of the library.
 
+= struts2-junit 0.2.2 =
+
+  * Release with a fix that allow to execute the tests *without* the need to download the Struts's DTD files every time it executes, thereby greatly improving the test execution time.
+
+= struts2-junit 0.2.1 =
+
+  * Release to allow distribution of the library from Maven Central Repository.
+
 = struts2-junit 0.2 =
 
   * Modified {{{@Config}}} annotation to support multiple Struts 2 XML configuration files.
