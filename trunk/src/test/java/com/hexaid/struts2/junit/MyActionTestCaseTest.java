@@ -8,7 +8,7 @@ import com.opensymphony.xwork2.Action;
 
 /**
  * @author Gabriel Belingueres
- *
+ * @since 1.0
  */
 @Config(file="struts.xml")
 public class MyActionTestCaseTest extends StrutsBaseTestCase {
