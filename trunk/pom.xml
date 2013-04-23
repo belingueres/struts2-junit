@@ -154,8 +154,9 @@
           <quiet>true</quiet>
           <links>
             <link>http://download.oracle.com/javase/6/docs/api/</link>
-            <link>http://struts.apache.org/2.2.3/struts2-core/apidocs/</link>
-            <link>http://struts.apache.org/2.2.3/xwork-core/apidocs/</link>
+            <link>http://struts.apache.org/release/2.3.x/struts2-plugins/struts2-junit-plugin/apidocs/</link>
+            <link>http://struts.apache.org/release/2.3.x/struts2-core/apidocs/</link>
+            <link>http://struts.apache.org/release/2.3.x/xwork-core/apidocs/</link>
           </links>
         </configuration>
         <executions>
