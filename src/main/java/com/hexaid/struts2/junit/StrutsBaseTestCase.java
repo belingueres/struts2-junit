@@ -22,7 +22,7 @@ import com.opensymphony.xwork2.config.Configuration;
 
 /**
  * @author Gabriel Belingueres
- * @version 0.2.3
+ * @version 1.0
  * @since 0.1
  */
 public class StrutsBaseTestCase extends StrutsJUnit4TestCase<Action> {

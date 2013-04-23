@@ -4,7 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * @author Gabriel Belingueres
- *
+ * @since 1.0
  */
 public class MyAction extends ActionSupport {
 
