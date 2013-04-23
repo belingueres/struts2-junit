@@ -168,13 +168,7 @@ public class StrutsBaseTestCaseTest {
 		}
 
 		@Override
-		public void loadConfiguration(String[] configFile) {
-			// do nothing
-		}
-
-		@Override
-		public ActionProxy createActionProxy(String namespace, String actionName,
-				String methodName) {
+		public ActionProxy createActionProxy() {
 			// do nothing
 			return null;
 		}

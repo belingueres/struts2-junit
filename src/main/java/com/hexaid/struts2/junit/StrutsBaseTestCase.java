@@ -1,36 +1,35 @@
 package com.hexaid.struts2.junit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.StrutsJUnit4TestCase;
 import org.apache.struts2.config.StrutsXmlConfigurationProvider;
-import org.apache.struts2.dispatcher.Dispatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.mock.web.MockServletContext;
 
+import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionProxy;
+import com.opensymphony.xwork2.ActionProxyFactory;
+import com.opensymphony.xwork2.config.Configuration;
 
 /**
  * @author Gabriel Belingueres
- * @version 0.2.2
+ * @version 0.2.3
  * @since 0.1
  */
-public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
+public class StrutsBaseTestCase extends StrutsJUnit4TestCase<Action> {
 	
-	protected MockServletContext servletContext;
-	protected MockHttpServletRequest request;
 	protected MockHttpSession session;
-	protected MockHttpServletResponse response;
 	protected ActionProxy actionProxy;
+    private DefaultConfiguration annotationConfiguration;
 	
 	@Rule public TestName testName = new TestName();
 	
@@ -38,32 +37,32 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		
-		servletContext = new MockServletContext();
-		request = new MockHttpServletRequest();
 		session = new MockHttpSession();
 		request.setSession(session);
-		response = new MockHttpServletResponse();
-		ServletActionContext.setRequest(request);
-		ServletActionContext.setResponse(response);
-		ServletActionContext.setServletContext(servletContext);
 		
-		final DefaultConfiguration config = new DefaultConfiguration(this); 
-
-		setUpResolvingAnnotations(config);
+		annotationConfiguration.createActionProxy();
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
-		response = null;
 		session = null;
-		request.setSession(null);
-		request = null;
-		servletContext = null;
 		actionProxy = null;
 	}
+	
+	@Override
+    protected void setupBeforeInitDispatcher() throws Exception {
+        annotationConfiguration = new DefaultConfiguration(this); 
+  
+        setUpResolvingAnnotations(annotationConfiguration);
+    }
 
-	/**
+    @Override
+    protected String getConfigPath() {
+	    return StringUtils.join(annotationConfiguration.configFile, ',');
+    }
+
+    /**
 	 * Create an ActionProxy, which is used to call an action through the entire interceptor stack.
 	 * NOTE: Before creating ActionProxies, you must loadConfiguration();
 	 * @param namespace the namespace of the action to execute (it may be null).
@@ -71,16 +70,35 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 	 * @param methodName the method inside the action to execute (it may be null).
 	 * @return the newly created ActionProxy. 
 	 */
-	protected ActionProxy createActionProxy(final String namespace,
-			final String actionName, final String methodName) {
-		final Dispatcher dispatcher = Dispatcher.getInstance();
-		final Map<String, Object> contextMap = dispatcher.createContextMap(
-				request, response, null, servletContext);
-
-		actionProxy = 
-				this.actionProxyFactory.createActionProxy(namespace, actionName, methodName, contextMap);
-		return actionProxy;
-	}
+    protected ActionProxy createActionProxy(final String namespace,
+                                            final String actionName,
+                                            final String methodName) {
+//        request.setRequestURI(uri);
+//        ActionMapping mapping = getActionMapping(request);
+//        String namespace = mapping.getNamespace();
+//        String name = mapping.getName();
+//        String method = mapping.getMethod();
+    
+        Configuration config = configurationManager.getConfiguration();
+        ActionProxy proxy = config.getContainer().getInstance(ActionProxyFactory.class)
+            .createActionProxy(namespace, actionName, methodName, new HashMap<String, Object>(), true, false);
+    
+        ActionContext invocationContext = proxy.getInvocation().getInvocationContext();
+        invocationContext.setParameters(new HashMap<String, Object>(request.getParameterMap()));
+        // set the action context to the one used by the proxy
+        ActionContext.setContext(invocationContext);
+    
+        // this is normaly done in onSetUp(), but we are using Struts internal
+        // objects (proxy and action invocation)
+        // so we have to hack around so it works
+        ServletActionContext.setServletContext(servletContext);
+        ServletActionContext.setRequest(request);
+        ServletActionContext.setResponse(response);
+        
+        actionProxy = proxy;
+    
+        return proxy;
+    }
 
 	/**
 	 * Loads the XML configuration providers given by the strutsFilenames array.
@@ -136,8 +154,7 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 			this.testObject = testObject;
 		}
 		
-		public abstract void loadConfiguration(String[] configFile);
-		public abstract ActionProxy createActionProxy(String namespace, String actionName, String methodName);
+		public abstract ActionProxy createActionProxy();
 
 		public void setUpFixture() {
 			// prepare parameters
@@ -161,11 +178,6 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 				// defaults to no method specified
 				methodName = null;
 			}
-
-			// do Struts the initialization stuff
-			//
-			loadConfiguration(configFile);
-			createActionProxy(namespace, actionName, methodName);
 		}
 
 		public void updateIfNotEmpty(final Config annotation) {
@@ -192,12 +204,7 @@ public class StrutsBaseTestCase extends StrutsJUnit4TestCase {
 		}
 
 		@Override
-		public void loadConfiguration(final String[] configFile) {
-			testObject.loadConfiguration(configFile);
-		}
-
-		@Override
-		public ActionProxy createActionProxy(final String namespace, final String actionName, final String methodName) {
+		public ActionProxy createActionProxy() {
 			return testObject.createActionProxy(namespace, actionName, methodName);
 		}
 
